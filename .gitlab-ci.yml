@@ -1,2 +1,4 @@
 push-to-github:
   script: "push-to-github.sh"
+  only:
+    - pushes
