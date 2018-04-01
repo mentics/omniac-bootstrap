@@ -12,20 +12,22 @@ else
   /tmp/docker-install.exe
 fi
 
-echo "Checking for omniac-admin image"
+echo "Checking for omniac-setup image"
 if [[ "$arg" == "r" ]]; then
-  echo "    deleting omniac-admin image"
-  docker rmi "omniac-admin"
+  echo "    deleting omniac-setup image"
+  docker rmi "omniac-setup"
 fi
-#docker images | grep "omniac-admin" >/dev/null 2>/dev/null
-if [[ -z `docker images | grep "omniac-admin"` || "$arg" == "r" ]]; then
-  echo "Building docker image omniac-admin"
-  docker build -t "omniac-admin" .
+if [[ -z `docker images | grep "omniac-setup"` || "$arg" == "r" ]]; then
+  echo "Building docker image omniac-setup"
+  docker build -t "omniac-setup" .
 else
-  echo "  found docker image omniac-admin"
+  echo "  found docker image omniac-setup"
 fi
 
-docker run --rm --name "admin" omniac-admin
+#read -s password -p "Password:"
+
+docker run --rm --name "omniac-setup" -v /`pwd`://app -w //app --env-file s/env.secrets omniac-setup python run.py
+
 
 
 

@@ -1,7 +1,10 @@
 FROM python:latest
 
-WORKDIR /app
+#WORKDIR /workdir
 
-ADD run.py /app
+RUN apt-get update
+RUN apt-get -y install libsodium-dev
+COPY run.py requirements.txt ./
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-CMD ["python", "run.py"]
+#CMD ["python", "-u", "run.py"]
