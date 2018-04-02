@@ -7,7 +7,7 @@ def getContent(filename):
     return f.read()
     
 def writeContent(filename, content):
-  with open(filename, "w") as f:
+  with open(filename, "wb") as f:
     return f.write(content)
 
 def encrypt(password, content):
@@ -18,10 +18,10 @@ def encrypt(password, content):
 
   key = kdf(secret.SecretBox.KEY_SIZE, password.encode('UTF-8'), salt, opslimit=ops, memlimit=mem)
   box = secret.SecretBox(key)
-  nonce = b"123456789012345678901234"
+  #nonce = b"123456789012345678901234"
 
-  encrypted = box.encrypt(content.encode('UTF-8'), nonce, encoding.Base64Encoder)
-  return encrypted.decode('UTF-8')
+  encrypted = box.encrypt(content.encode('UTF-8'))
+  return encrypted
 
 passwordFile = argv[1]
 contentFile = argv[2]
@@ -33,7 +33,8 @@ toEncrypt = getContent(contentFile)
 
 entry = getContent(passwordFile)
 key, password = entry.split('=')
-#print("PASSWORD: " + password)
+password = password.strip()
+print("PASSWORD: [" + password + ']')
 
 encrypted = encrypt(password, toEncrypt)
 #print("ENCRYPTED:\n"+encrypted)

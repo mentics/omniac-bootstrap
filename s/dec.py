@@ -2,12 +2,12 @@ from sys import argv
 from nacl import pwhash, secret, encoding
 
 
-def getContent(filename):
-  with open(filename) as f:
+def getContent(filename, flags):
+  with open(filename, 'r'+flags) as f:
     return f.read()
     
 def writeContent(filename, content):
-  with open(filename, "w") as f:
+  with open(filename, 'w') as f:
     return f.write(content)
 
 def decrypt(password, content):
@@ -18,13 +18,9 @@ def decrypt(password, content):
 
   key = kdf(secret.SecretBox.KEY_SIZE, password.encode('UTF-8'), salt, opslimit=ops, memlimit=mem)
   box = secret.SecretBox(key)
-  nonce = b"123456789012345678901234"
+  #nonce = b"123456789012345678901234"
 
-  #toDecrypt = encoding.Base64Encoder.decode(content.encode('UTF-8'))
-  toDecrypt = content.encode('UTF-8')
-  print("DDDD: ")
-  print(toDecrypt)
-  decrypted = box.decrypt(toDecrypt, nonce, encoding.Base64Encoder)
+  decrypted = box.decrypt(content)#, nonce)
   return decrypted.decode('UTF-8')
 
   
@@ -33,10 +29,10 @@ contentFile = argv[2]
 outputFile = argv[3]
 #print("Decrypting file: "+contentFile)
 
-toDecrypt = getContent(contentFile)
+toDecrypt = getContent(contentFile, 'b')
 #print("TO DECRYPT:\n" + toDecrypt)
 
-line = getContent(passwordFile)
+line = getContent(passwordFile, '')
 key, password = line.split('=')
 #print("PASSWORD: " + password)
 

@@ -26,7 +26,7 @@ fi
 
 #read -s password -p "Password:"
 
-docker run --rm --name "omniac-setup" -v /`pwd`://app -w //app --env-file s/env.secrets omniac-setup python run.py
+docker run --rm --name "omniac-setup" -v /`pwd`://app -w //app --env-file s/.secrets omniac-setup python -u run.py
 
 
 
